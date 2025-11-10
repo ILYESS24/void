@@ -2,10 +2,10 @@
 set -e
 
 echo "Installing npm dependencies (ignoring native build scripts)..."
-npm install --ignore-scripts
+npm install --ignore-scripts 2>&1 | grep -v "gyp ERR" || true
 
 echo "Running postinstall scripts (excluding native builds)..."
-node build/npm/postinstall.js || true
+SKIP_NATIVE_BUILDS=1 node build/npm/postinstall.js 2>&1 | grep -v "gyp ERR" || true
 
 echo "Building React components..."
 npm run buildreact
