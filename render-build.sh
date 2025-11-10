@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-echo "Installing dependencies..."
-npm install
+echo "Installing dependencies (ignoring native build scripts for web deployment)..."
+npm install --ignore-scripts
 
 echo "Building React components..."
 npm run buildreact
