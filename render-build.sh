@@ -18,8 +18,8 @@ set -e  # Exit on errors from now on
 echo "Building React components..."
 npm run buildreact
 
-echo "Compiling web version..."
-npm run compile-web
+echo "Compiling web version (with increased memory limit)..."
+NODE_OPTIONS="--max-old-space-size=4096" npm run compile-web
 
 echo "Build complete!"
 
