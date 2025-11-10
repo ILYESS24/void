@@ -1,14 +1,13 @@
 #!/bin/bash
 set +e  # Don't exit on errors
 
-echo "Installing npm dependencies (ignoring native build scripts and optional deps)..."
-npm install --ignore-scripts --no-optional 2>&1 | tee /tmp/npm-install.log
-NPM_EXIT_CODE=${PIPESTATUS[0]}
+echo "Installing npm dependencies (ignoring native build scripts)..."
+npm install --ignore-scripts 2>&1 | grep -v "gyp ERR" | grep -v "native-keymap" || true
 
-# Check if critical dependencies were installed
-if [ ! -d "node_modules/gulp" ] || [ ! -d "node_modules/typescript" ]; then
-    echo "Critical dependencies missing, retrying without --no-optional..."
-    npm install --ignore-scripts 2>&1 | grep -v "gyp ERR" | grep -v "native-keymap" || true
+# Install rollup native dependencies manually if needed
+if [ ! -d "node_modules/@rollup/rollup-linux-x64-gnu" ]; then
+    echo "Installing rollup native dependencies..."
+    npm install @rollup/rollup-linux-x64-gnu --save-optional --ignore-scripts 2>&1 | grep -v "gyp ERR" || true
 fi
 
 echo "Running postinstall scripts..."
