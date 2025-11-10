@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 
-echo "Installing system dependencies..."
-apt-get update -qq && apt-get install -y -qq libxkbfile-dev libx11-dev libsecret-1-dev || true
+echo "Installing npm dependencies (ignoring native build scripts)..."
+npm install --ignore-scripts
 
-echo "Installing npm dependencies..."
-npm install || npm install --ignore-scripts
+echo "Running postinstall scripts (excluding native builds)..."
+node build/npm/postinstall.js || true
 
 echo "Building React components..."
 npm run buildreact
